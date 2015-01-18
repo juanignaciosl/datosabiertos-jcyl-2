@@ -74,7 +74,7 @@ h1, h2, h3 {
 }
 
 .charts-container {
-  max-width: 1000px;
+  max-width: 90%;
   overflow-x: scroll;
   display: inline-block;
 }
