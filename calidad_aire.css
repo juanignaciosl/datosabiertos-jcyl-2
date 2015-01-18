@@ -15,7 +15,18 @@ html, body {
 }
 
 .section {
-  margin-bottom: 40px;
+  margin: 40px 0;
+  padding-bottom: 40px;
+  border-bottom: 20px dotted #EEEEEE;
+}
+
+h1 {
+  font-size: 48px;
+}
+
+h2, h3 {
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 h1, h2, h3 {
