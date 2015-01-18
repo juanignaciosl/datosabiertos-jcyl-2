@@ -1,3 +1,16 @@
+var colors = [
+  "rgba(220,220,120,0.5)",
+  "rgba(120,220,120,0.5)",
+  "rgba(20,220,120,0.5)",
+  "rgba(220,220,120,0.5)",
+  "rgba(220,120,120,0.5)",
+  "rgba(220,20,120,0.5)",
+  "rgba(220,220,120,0.5)",
+  "rgba(220,220,220,0.5)",
+  "rgba(220,220,20,0.5)",
+  "rgba(120,120,20,0.5)"
+];
+
 function calidadAire(parentId, chartCanvasParentId, options) {
   var id = parentId + '_';
   var mapContainer = $('#' + parentId);
@@ -83,17 +96,6 @@ function calidadAire(parentId, chartCanvasParentId, options) {
           return a.label.localeCompare(b.label);
         });
       }
-      var colors = [
-        "rgba(220,220,120,0.5)",
-        "rgba(120,220,120,0.5)",
-        "rgba(20,220,120,0.5)",
-        "rgba(220,220,120,0.5)",
-        "rgba(220,120,120,0.5)",
-        "rgba(220,20,120,0.5)",
-        "rgba(220,220,120,0.5)",
-        "rgba(220,220,220,0.5)",
-        "rgba(220,220,20,0.5)"
-      ];
       var datasets = _.map(dataProvincias, function(dataProvincia, i) {
           var avgsProvincia = dataProvincia.avgs;
           return {
@@ -139,4 +141,68 @@ function legend(parent, data) {
         var text = document.createTextNode(d.label);
         title.appendChild(text);
     });
+}
+
+function movimientoNatural(chartCanvasParentId, options) {
+  var chartContainer = $('#' + chartCanvasParentId);
+
+  var chartCanvasId = chartCanvasParentId + '_';
+  var chartCanvasIdN = chartCanvasParentId + '_n';
+  var chartCanvasIdD = chartCanvasParentId + '_d';
+  var chartCanvasIdM = chartCanvasParentId + '_m';
+
+  var chartLegendId = chartCanvasParentId + '_l';
+  chartContainer.append("<div id='" + chartLegendId + "'></div>");
+  
+  var chartsContainer = $('<div class="charts-container"></div>').appendTo(chartContainer);
+  chartsContainer.append('<h3>Nacimientos</h3>');
+  chartsContainer.append("<canvas id='" + chartCanvasIdN + "' width='2000' height='250'></canvas>");
+  chartsContainer.append('<h3>Defunciones</h3>');
+  chartsContainer.append("<canvas id='" + chartCanvasIdD + "' width='2000' height='250'></canvas>");
+  chartsContainer.append('<h3>Matrimonios</h3>');
+  chartsContainer.append("<canvas id='" + chartCanvasIdM + "' width='2000' height='250'></canvas>");
+
+  var table = options.table;
+  query('select distinct ano from movimiento_natural_cyl order by ano', function(data) {
+    var anhos = _.map(data.rows, function(row) {
+      return row.ano;
+    });
+
+    query('select ano, p, n, d, m from movimiento_natural_cyl order by p, ano', function(data) {
+      var row = data.rows;
+      var rowsProvincias = _.groupBy(data.rows, function(row) {
+        return row.p;
+      });
+
+      function datasets(column) {
+        var i = 0;
+        return _.map(rowsProvincias, function(rowsProvincia, p) {
+          i++;
+          return {
+            label: rowsProvincia[0].p,
+            fillColor: colors[i],
+            strokeColor: colors[i],
+            highlightFill: colors[i],
+            highlightStroke: colors[i],
+            data: _.map(rowsProvincia, function(rowProvincia) {
+              return rowProvincia[column];
+            })
+          }
+        });
+      }
+
+      var dataN = { labels: anhos, datasets: datasets('n') }
+      var dataD = { labels: anhos, datasets: datasets('d') }
+      var dataM = { labels: anhos, datasets: datasets('m') }
+
+      var options = {};
+
+      legend(document.getElementById(chartLegendId), dataN);
+      new Chart(document.getElementById(chartCanvasIdN).getContext("2d")).Bar(dataN, options);
+      new Chart(document.getElementById(chartCanvasIdD).getContext("2d")).Bar(dataD, options);
+      new Chart(document.getElementById(chartCanvasIdM).getContext("2d")).Bar(dataM, options);
+
+    });
+
+  });
 }

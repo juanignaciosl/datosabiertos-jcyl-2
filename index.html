@@ -21,6 +21,9 @@
         table: 'calidad_del_aire_cyl_anual_co2'
       });
       cartodb.createVis('map-tierra_de_sabor', 'http://team.cartodb.com/api/v2/viz/4c7be18a-9f19-11e4-89b2-0e9d821ea90d/viz.json');
+      movimientoNatural('chart-movimiento_natural', {
+        table: 'movimiento_natural_cyl'
+      });
     }
   </script>
 </head>
@@ -39,6 +42,11 @@
     <h3>CO<sup>2</sup> medio</h3>
     <div id='map-calidad_aire_co2' class='map-container'></div>
     <div id='chart-calidad_aire_co2' class='chart-container'></div>
+  </div>
+
+  <div class="section">
+    <h2>Movimiento natural</h2>
+    <div id='chart-movimiento_natural' class='chart-container'></div>
   </div>
 
   <div class="section">
