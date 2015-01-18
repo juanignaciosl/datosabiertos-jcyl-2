@@ -20,6 +20,7 @@
         vizJson: 'http://team.cartodb.com/api/v2/viz/cdc6d5bc-9f03-11e4-984d-0e9d821ea90d/viz.json',
         table: 'calidad_del_aire_cyl_anual_co2'
       });
+      cartodb.createVis('map-tierra_de_sabor', 'http://team.cartodb.com/api/v2/viz/4c7be18a-9f19-11e4-89b2-0e9d821ea90d/viz.json');
     }
   </script>
 </head>
@@ -29,18 +30,28 @@
     <h1>GeoOpenDataCyL: visualizaci&oacute;n de datos abiertos</h1>
     <h2>Visualizaciones de datos disponibles en el <a href="http://www.datosabiertos.jcyl.es/">Portal de Datos Abiertos de la Junta de Castilla y León</a></h2>
   </div>
+
   <div class="section">
     <h2>Evolución de la calidad del aire</h2>
-    <div class="section">
-      <h3>SO<sup>2</sup> medio</h3>
-      <div id='map-calidad_aire_so2' class='map-container'></div>
-      <div id='chart-calidad_aire_so2' class='chart-container'></div>
-    </div>
-    <div class="section">
-      <h3>CO<sup>2</sup> medio</h3>
-      <div id='map-calidad_aire_co2' class='map-container'></div>
-      <div id='chart-calidad_aire_co2' class='chart-container'></div>
-    </div>
+    <h3>SO<sup>2</sup> medio</h3>
+    <div id='map-calidad_aire_so2' class='map-container'></div>
+    <div id='chart-calidad_aire_so2' class='chart-container'></div>
+    <h3>CO<sup>2</sup> medio</h3>
+    <div id='map-calidad_aire_co2' class='map-container'></div>
+    <div id='chart-calidad_aire_co2' class='chart-container'></div>
+  </div>
+
+  <div class="section">
+    <h2>Tierra de Sabor</h2>
+    <h3>Empresas y productos registrados por localidad</h3>
+    <div id='map-tierra_de_sabor' class='map-container'></div>
+  </div>
+
+  <div class="footer">
+    <p>Para una correcta visualización de los datos se recomienda utilizar <a href="http://www.google.com/chrome/">Chrome</a>.</p>
+    <p>Puedes descargarte el código fuente del <a href="https://github.com/juanignaciosl/datosabiertos-jcyl-2">repositorio en GitHub</a> y modificarlo a tu antojo.</p>
+    <p>2014 Juan Ignacio Sánchez</p>
+    <p><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
   </div>
 </body>
 </html>

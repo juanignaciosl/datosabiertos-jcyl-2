@@ -14,4 +14,3 @@ function query(query, successCallback, errorCallback) {
     }
   });
 }
-
