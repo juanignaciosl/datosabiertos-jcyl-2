@@ -1,4 +1,4 @@
-function calidadAire(parentId, chartCanvasParentId) {
+function calidadAire(parentId, chartCanvasParentId, options) {
   var id = parentId + '_';
   var mapContainer = $('#' + parentId);
   mapContainer.append('<div id="' + id + '" class="map"></div>');
@@ -8,6 +8,9 @@ function calidadAire(parentId, chartCanvasParentId) {
   var chartContainer = $('#' + chartCanvasParentId);
   chartContainer.append("<div id='" + chartLegendId + "'></div>");
   chartContainer.append("<canvas id='" + chartCanvasId + "' width='800' height='250'></canvas>");
+
+  var vizJson = options.vizJson;
+  var table = options.table;
 
   queryYears(function(years) {
     var yearSelector = $('<div class="year-selector"></div>').appendTo(mapContainer);
@@ -24,7 +27,7 @@ function calidadAire(parentId, chartCanvasParentId) {
   });
 
   function queryYears(callback) {
-    query('SELECT distinct year FROM calidad_del_aire_cyl_anual_so2 order by year', 
+    query("SELECT distinct year FROM " + table + " order by year", 
       function(responseData) {
         callback(_.map(responseData.rows, function(row) {
           return row.year;
@@ -35,7 +38,6 @@ function calidadAire(parentId, chartCanvasParentId) {
   var layers;
 
   function loadMap(year, callback) {
-    var vizJson = 'http://team.cartodb.com/api/v2/viz/d298d60e-9eee-11e4-bc2e-0e0c41326911/viz.json';
     cartodb.createVis(id, vizJson).done(function(vis, theLayers) {
       layers = theLayers;
       //var map = vis.getNativeMap();
@@ -47,12 +49,12 @@ function calidadAire(parentId, chartCanvasParentId) {
   function loadMapYear(year) {
     mapContainer.find('.year').removeClass('selected');
     mapContainer.find('#year-' + year).addClass('selected');
-    var sql = "select c.cartodb_id, p.the_geom_webmercator, initcap(p.nom_prov), c.year, c.avg from calidad_del_aire_cyl_anual_so2 c inner join spanish_provinces p on c.provincia = p.nom_prov and year = " + year;
+    var sql = "select c.cartodb_id, p.the_geom_webmercator, initcap(p.nom_prov), c.year, c.avg from " + table + " c inner join spanish_provinces p on c.provincia = p.nom_prov and year = " + year;
     layers[1].getSubLayer(0).setSQL(sql);
   }
 
   function loadChart(years, callback) {
-    var query = "select initcap(p.nom_prov) Provincia, c.year, c.avg from calidad_del_aire_cyl_anual_so2 c inner join spanish_provinces p on c.provincia = p.nom_prov order by year, Provincia";
+    var query = "select initcap(p.nom_prov) Provincia, c.year, c.avg from " + table + " c inner join spanish_provinces p on c.provincia = p.nom_prov order by year, Provincia";
     var sql = cartodb.SQL({ user: 'juanignaciosl' });
     sql.execute(query).done(function(data) {
       var rowsProvincias = _.groupBy(data.rows, function(row) {
